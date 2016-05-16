@@ -17,8 +17,10 @@ class MockupBot:
 		self.message_link = 'https://slack.com/api/chat.postMessage'
 
 	def connect(self):
+		print("trololol")
 		s = socket.socket()
 		resp = urllib.request.urlopen('https://slack.com/api/rtm.start?token=' + self.token).read().decode('utf-8')
+		print(resp)
 		self.socket = websocket.create_connection(json.loads(resp)['url'])
 		print(self.socket.recv())
 
@@ -148,7 +150,11 @@ class MockupBot:
 		self.id = self.id + 1
 		requests.post(self.message_link, data=data)
 
-bot = MockupBot('xoxb-27973940390-ofTMTNyVAp9TYDg2hcpWsjxT')
+keyFile = open('apitoken', 'r')
+apitoken = keyFile.readline()
+print(apitoken)
+keyFile.close()
+bot = MockupBot(apitoken)
 bot.connect()
 bot.get_channels()
 t = threading.Thread(target=bot.ping)
